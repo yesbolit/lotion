@@ -4,6 +4,8 @@
       // Add top margin for headings
       'pt-12 first:pt-0': block.type === BlockType.H1,
       'pt-4 first:pt-0': block.type === BlockType.H2,
+      'pt-3 first:pt-0': block.type === BlockType.H3,
+      'pt-2 first:pt-0': block.type === BlockType.H4,
     }">
     <div class="h-full pl-4 pr-2 text-center cursor-pointer transition-all duration-150 text-neutral-300 flex"
       :class="{
@@ -11,7 +13,8 @@
         'py-3.5': block.type === BlockType.H1,
         'py-3': block.type === BlockType.H2,
         'py-2.5': block.type === BlockType.H3,
-        'py-1.5': ![BlockType.H1, BlockType.H2, BlockType.H3].includes(block.type),
+        'py-2': block.type === BlockType.H4,
+        'py-1.5': ![BlockType.H1, BlockType.H2, BlockType.H3, BlockType.H4].includes(block.type),
       }">
       <Tooltip value="<span class='text-neutral-400'><span class='text-white'>Click</span> to delete block</span>">
         <v-icon name="hi-trash" @click="emit('deleteBlock')"
@@ -166,7 +169,7 @@ function keyDownHandler (event:KeyboardEvent) {
 }
 
 function isContentBlock () {
-  return [BlockType.Text, BlockType.Quote, BlockType.H1, BlockType.H2, BlockType.H3].includes(props.block.type)
+  return [BlockType.Text, BlockType.Quote, BlockType.H1, BlockType.H2, BlockType.H3, BlockType.H4].includes(props.block.type)
 }
 
 const content = ref<any>(null)
@@ -443,6 +446,7 @@ function parseMarkdown (event:KeyboardEvent) {
     [BlockType.H1]: /^#\s(.*)$/,
     [BlockType.H2]: /^##\s(.*)$/,
     [BlockType.H3]: /^###\s(.*)$/,
+    [BlockType.H4]: /^####\s(.*)$/,
     [BlockType.Quote]: /^>\s(.*)$/,
     [BlockType.Divider]: /^---\s$/
   }
@@ -458,12 +462,14 @@ function parseMarkdown (event:KeyboardEvent) {
   }
 
 
-  if (textContent.match(markdownRegexpMap[BlockType.H1]) && event.key === ' ') {
-    handleMarkdownContent(BlockType.H1)
-  } else if (textContent.match(markdownRegexpMap[BlockType.H2]) && event.key === ' ') {
-    handleMarkdownContent(BlockType.H2)
+  if (textContent.match(markdownRegexpMap[BlockType.H4]) && event.key === ' ') {
+    handleMarkdownContent(BlockType.H4)
   } else if (textContent.match(markdownRegexpMap[BlockType.H3]) && event.key === ' ') {
     handleMarkdownContent(BlockType.H3)
+  } else if (textContent.match(markdownRegexpMap[BlockType.H2]) && event.key === ' ') {
+    handleMarkdownContent(BlockType.H2)
+  } else if (textContent.match(markdownRegexpMap[BlockType.H1]) && event.key === ' ') {
+    handleMarkdownContent(BlockType.H1)
   } else if (textContent.match(markdownRegexpMap[BlockType.Quote]) && event.key === ' ') {
     handleMarkdownContent(BlockType.Quote)
   } else if (textContent.match(markdownRegexpMap[BlockType.Divider]) && event.key === ' ') {

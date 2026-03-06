@@ -224,7 +224,8 @@ function merge (blockIdx: number) {
   if (props.onDeleteBlock) props.onDeleteBlock(props.page.blocks[blockIdx])
   // When deleting the first character of non-text block
   // the block should first turn into a text block
-  if([BlockType.H1, BlockType.H2, BlockType.H3, BlockType.Quote]
+  if([BlockType.H1, BlockType.H2, BlockType.H3, BlockType.H4, BlockType.Quote,
+      BlockType.ListBulleted, BlockType.ListNumbered]
       .includes(props.page.blocks[blockIdx].type)){
     const prevBlockContent = blockElements.value[blockIdx].getTextContent()    
     setBlockType(blockIdx, BlockType.Text)
@@ -243,13 +244,13 @@ function mergeBlocks (prefixBlockIdx: number, suffixBlockIdx: number) {
   if (isTextBlock(props.page.blocks[prefixBlockIdx].type)) {
     const prevBlockContentLength = blockElements.value[prefixBlockIdx].getTextContent().length
     let suffix = (props.page.blocks[suffixBlockIdx] as any).details.value
-    if ([BlockType.H1, BlockType.H2, BlockType.H3,BlockType.Quote].includes(props.page.blocks[suffixBlockIdx].type)) suffix = blockElements.value[suffixBlockIdx].getTextContent()
+    if ([BlockType.H1, BlockType.H2, BlockType.H3, BlockType.H4, BlockType.Quote].includes(props.page.blocks[suffixBlockIdx].type)) suffix = blockElements.value[suffixBlockIdx].getTextContent()
     props.page.blocks[prefixBlockIdx].details.value = (props.page.blocks[prefixBlockIdx] as any).details.value + suffix
     props.page.blocks.splice(suffixBlockIdx, 1)
     setTimeout(() => {
       blockElements.value[prefixBlockIdx].setCaretPos(prevBlockContentLength)
     })
-  } else if ([BlockType.H1, BlockType.H2, BlockType.H3].includes(props.page.blocks[prefixBlockIdx].type)) {
+  } else if ([BlockType.H1, BlockType.H2, BlockType.H3, BlockType.H4].includes(props.page.blocks[prefixBlockIdx].type)) {
     const prevBlockContentLength = (props.page.blocks[prefixBlockIdx] as any).details.value.length
     props.page.blocks[prefixBlockIdx].details.value += blockElements.value[suffixBlockIdx].getTextContent()
     props.page.blocks.splice(suffixBlockIdx, 1)

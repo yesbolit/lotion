@@ -2,6 +2,7 @@ import TextBlock from '@/components/blocks/TextBlock.vue'
 import DividerBlock from '@/components/blocks/DividerBlock.vue'
 import HeadingBlock from '@/components/blocks/HeadingBlock.vue'
 import QuoteBlock from '@/components/blocks/QuoteBlock.vue'
+import ListBlock from '@/components/blocks/ListBlock.vue'
 
 
 export interface Block {
@@ -15,13 +16,24 @@ export enum BlockType {
   H1 = 'H1',
   H2 = 'H2',
   H3 = 'H3',
+  H4 = 'H4',
   Divider = 'DIVIDER',
-  Quote = 'QUOTE'
+  Quote = 'QUOTE',
+  ListBulleted = 'LIST_BULLETED',
+  ListNumbered = 'LIST_NUMBERED',
+}
+
+export interface ListItem {
+  id: string;
+  content: string;
+  level?: number;
 }
 
 export interface Details {
   value?: string;
   blockTypes?: BlockType[];
+  items?: ListItem[];
+  anchor?: string;
 }
 
 export const BlockComponents = {
@@ -29,14 +41,25 @@ export const BlockComponents = {
   [BlockType.H1]: HeadingBlock,
   [BlockType.H2]: HeadingBlock,
   [BlockType.H3]: HeadingBlock,
+  [BlockType.H4]: HeadingBlock,
   [BlockType.Divider]: DividerBlock,
   [BlockType.Quote]: QuoteBlock,
+  [BlockType.ListBulleted]: ListBlock,
+  [BlockType.ListNumbered]: ListBlock,
 }
 
 export const textBlockMap = [BlockType.Text, BlockType.Quote]
 
 export const isTextBlock = (type: string) => {
   return textBlockMap.some(textBlock => textBlock === type)
+}
+
+export const isListBlock = (type: string) => {
+  return type === BlockType.ListBulleted || type === BlockType.ListNumbered
+}
+
+export const isHeadingBlock = (type: string) => {
+  return [BlockType.H1, BlockType.H2, BlockType.H3, BlockType.H4].includes(type as BlockType)
 }
 
 export const availableBlockTypes = [
@@ -66,6 +89,12 @@ export const availableBlockTypes = [
     canSplit: true,
   }, {
     type: 'Turn into',
+    icon: 'bi-type-h3',
+    label: 'Heading 4',
+    blockType: BlockType.H4,
+    canSplit: true,
+  }, {
+    type: 'Turn into',
     icon: 'bi-hr',
     label: 'Divider',
     blockType: BlockType.Divider,
@@ -76,5 +105,17 @@ export const availableBlockTypes = [
     label: 'Quote',
     blockType: BlockType.Quote,
     canSplit: true,
+  }, {
+    type: 'Turn into',
+    icon: 'bi-list-ul',
+    label: 'Bulleted List',
+    blockType: BlockType.ListBulleted,
+    canSplit: false,
+  }, {
+    type: 'Turn into',
+    icon: 'bi-list-ol',
+    label: 'Numbered List',
+    blockType: BlockType.ListNumbered,
+    canSplit: false,
   },
 ] as { type:string, icon:string, label:string, blockType:BlockType|string, canSplit:boolean }[]

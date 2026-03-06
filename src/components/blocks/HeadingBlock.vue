@@ -27,10 +27,16 @@ const headingConfig = {
     placeholder: 'Heading 3',
     class: 'text-2xl font-medium',
   },
+  [BlockType.H4]: {
+    placeholder: 'Heading 4',
+    class: 'text-xl font-medium',
+  },
   // Irrelevant BlockTypes
   [BlockType.Text]: null,
   [BlockType.Divider]: null,
   [BlockType.Quote]: null,
+  [BlockType.ListBulleted]: null,
+  [BlockType.ListNumbered]: null,
 }
 
 const props = defineProps({

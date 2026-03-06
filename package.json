@@ -1,8 +1,8 @@
 {
-  "name": "@dashibase/lotion",
-  "version": "0.1.5",
+  "name": "@yesbolit/lotion",
+  "version": "0.3.0",
   "type": "module",
-  "main": "lib/lolo.js",
+  "main": "lib/lotion.js",
   "types": "types/src/index.d.ts",
   "files": [
     "lib/",
